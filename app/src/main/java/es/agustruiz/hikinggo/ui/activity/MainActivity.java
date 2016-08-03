@@ -1,4 +1,4 @@
-package es.agustruiz.hikinggo.ui;
+package es.agustruiz.hikinggo.ui.activity;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
