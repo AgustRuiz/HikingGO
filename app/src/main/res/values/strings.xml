@@ -14,6 +14,7 @@
     <string name="action_home">Home</string>
     <string name="action_go_to_map">Go to map</string>
     <string name="action_my_routes">My routes</string>
+    <string name="title_activity_maps">Map</string>
 
 
 </resources>

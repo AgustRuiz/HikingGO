@@ -10,6 +10,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,6 +21,8 @@ import es.agustruiz.hikinggo.R;
 import es.agustruiz.hikinggo.presenter.MainPresenter;
 
 public class MainActivity extends AppCompatActivity {
+
+    protected static final String LOG_TAG = MainActivity.class.getName() + "[A]";
 
     //region [Binded views & Variables]
 
@@ -118,14 +121,19 @@ public class MainActivity extends AppCompatActivity {
         mNavView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem item) {
+                Log.d(LOG_TAG, "Here I am");
+
+
                 int id = item.getItemId();
                 switch (id) {
-                    case R.id.nav_home:
                     case R.id.nav_map:
+                        mPresenter.startMapActivity();
+                        break;
+                    case R.id.nav_home:
                     case R.id.nav_routes:
                     case R.id.nav_settings:
                     case R.id.nav_about_this:
-                        // TODO: Handle actions...
+                        showMessageView("No action yet...");
                         break;
                 }
                 mDrawer.closeDrawer(GravityCompat.START);
@@ -137,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
     protected void showMessageView(View view, String message){
         if(view == null)
             view = mFab;
-        Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+        Snackbar.make(view, message, Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show();
     }
 
