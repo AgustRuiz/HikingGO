@@ -43,7 +43,6 @@ public class MainActivity extends AppCompatActivity {
 
     //endregion
 
-
     //region [Activity methods]
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -1,48 +1,179 @@
 package es.agustruiz.hikinggo.ui.activity;
 
-import android.support.v4.app.FragmentActivity;
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.View;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import es.agustruiz.hikinggo.R;
+import es.agustruiz.hikinggo.system.Permission;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
+public class MapsActivity extends AppCompatActivity {
 
-    private GoogleMap mMap;
+    protected static final String LOG_TAG = MapsActivity.class.getName() + "[A]";
+
+    //region [Binded views & Variables]
+
+    @BindView(R.id.toolbar)
+    Toolbar mToolbar;
+
+    @BindView(R.id.fab)
+    FloatingActionButton mFab;
+
+    @Nullable
+    @BindView(R.id.drawer_layout)
+    DrawerLayout mDrawer;
+
+    @Nullable
+    @BindView(R.id.nav_view)
+    NavigationView mNavView;
+
+    Context mContext;
+
+    protected GoogleMap mMap;
+
+    //endregion
+
+    // region [Overriden methods]
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+        ButterKnife.bind(this);
+        mContext = getApplicationContext();
+        initializeMap();
+        initializeToolbar();
+        initializeFab();
+        //initializeDrawer();
+        //initializeNavigationView();
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        //super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case Permission.PERMISSIONS_REQUEST_FINE_LOCATION:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    mMap.setMyLocationEnabled(true);
+                } else {
+                    showMessageView(getString(R.string.msg_must_grant_location_permission));
+                }
+                break;
+        }
+    }
+
+    //endregion
+
+    //region [Private methods]
+
+    private void initializeMap() {
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
+        mapFragment.getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(GoogleMap googleMap) {
+                mMap = googleMap;
+                configureMap(mMap);
+
+
+                //TODO: This is only for testing
+
+                // Points list
+                List<LatLng> pointsList = new ArrayList<>();
+                pointsList.add(new LatLng(38.113281, -3.093529));
+                pointsList.add(new LatLng(38.113326, -3.093385));
+                pointsList.add(new LatLng(38.113484, -3.093304));
+                pointsList.add(new LatLng(38.113923, -3.093230));
+                pointsList.add(new LatLng(38.113933, -3.092821));
+                pointsList.add(new LatLng(38.113944, -3.091978));
+                pointsList.add(new LatLng(38.113961, -3.091196));
+                pointsList.add(new LatLng(38.113412, -3.090090));
+
+                PolylineOptions polyline = new PolylineOptions();
+                for(LatLng point: pointsList){
+                    polyline.add(point);
+                    mMap.addCircle(new CircleOptions()
+                            .clickable(true)
+                            .zIndex(200)
+                            .center(point)
+                            .radius(5)
+                            .fillColor(Color.argb(255, 0, 0, 255))
+                            .strokeWidth(0));
+                }
+                polyline
+                        .clickable(true)
+                        .zIndex(100)
+                        .width(5)
+                        .color(Color.argb(255, 255, 0, 0));
+                mMap.addPolyline(polyline);
+
+
+
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(38.115129, -3.087572), 16));
+
+
+
+            }
+        });
     }
 
-
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
-
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+    private void initializeToolbar() {
+        //setSupportActionBar(mToolbar);
     }
+
+    private void initializeFab() {
+        mFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showMessageView(view, "Do action here");
+            }
+        });
+    }
+
+    protected void configureMap(GoogleMap map) {
+        map.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+        if (Permission.checkLocationPermission(this)) {
+            map.setMyLocationEnabled(true);
+        }
+    }
+
+    protected void showMessageView(String message) {
+        showMessageView(null, message);
+    }
+
+    protected void showMessageView(View view, String message) {
+        if (view == null)
+            view = mFab;
+        Snackbar.make(view, message, Snackbar.LENGTH_LONG)
+                .setAction("Action", null).show();
+    }
+
+    //endregion
+
 }
