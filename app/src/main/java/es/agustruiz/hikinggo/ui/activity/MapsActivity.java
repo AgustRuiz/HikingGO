@@ -98,6 +98,15 @@ public class MapsActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        if(mFabMenu.isOpened()){
+            mFabMenu.close(true);
+        }else{
+            super.onBackPressed();
+        }
+    }
+
     //endregion
 
     //region [Private methods]
