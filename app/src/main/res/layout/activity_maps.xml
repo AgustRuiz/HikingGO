@@ -20,13 +20,60 @@
         android:layout_height="match_parent" />
 
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        android:tint="@android:color/white"
-        android:src="@drawable/ic_map_black_24dp" />
+    <com.github.clans.fab.FloatingActionMenu
+        android:id="@+id/fab_menu"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:padding="@dimen/fam_margin"
+        app:menu_backgroundColor="@color/colorFabMenuBackground"
+        app:menu_colorNormal="@color/colorAccent"
+        app:menu_colorPressed="@color/colorAccent400"
+
+        app:menu_colorRipple="@color/colorFabRipple"
+        app:menu_labels_colorNormal="@color/colorFabLabelNormal"
+        app:menu_labels_colorPressed="@color/colorFabLabelPressed"
+
+
+        app:menu_labels_colorRipple="@color/colorFabLabelRipple"
+        app:menu_labels_ellipsize="end"
+        app:menu_labels_singleLine="true"
+
+        app:layout_behavior="es.agustruiz.hikinggo.ui.customViews.FloatingActionMenuBehavior"
+        >
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/fab_satellite"
+            style="@style/FabStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_satellite_24dp"
+            android:tint="#fff"
+            app:fab_label="Satellite"
+            app:fab_size="mini" />
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/fab_normal"
+            style="@style/FabStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_map_24dp"
+            android:tint="#fff"
+            app:fab_label="Normal"
+            app:fab_size="mini" />
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/fab_terrain"
+            style="@style/FabStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_terrain_24dp"
+            android:tint="#fff"
+            app:fab_label="Terrain"
+            app:fab_size="mini" />
+
+    </com.github.clans.fab.FloatingActionMenu>
+
 
 </android.support.design.widget.CoordinatorLayout>
+

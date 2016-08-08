@@ -4,6 +4,16 @@
     <color name="colorPrimary">#FF9800</color>
     <color name="colorPrimaryDark">#F57C00</color>
     <color name="colorAccent">#4CAF50</color>
+    <color name="colorAccent400">#66BA6A</color>
     <color name="colorNavigationBar">#F57C00</color>
+
+    <!-- FAB colors -->
+    <color name="colorFabMenuBackground">#AAFFFFFF</color>
+
+    <color name="colorFabRipple">#99FFFFFF</color>
+
+    <color name="colorFabLabelNormal">#99333333</color>
+    <color name="colorFabLabelPressed">#99444444</color>
+    <color name="colorFabLabelRipple">#99FFFFFF</color>
 
 </resources>
