@@ -9,5 +9,45 @@
     tools:context=".ui.fragment.CompassActivityFragment"
     tools:showIn="@layout/activity_compass">
 
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/compass_base"
+        android:layout_width="200sp"
+        android:layout_height="200sp"
+        android:layout_centerInParent="true"
+        android:layout_margin="12dp"
+        android:contentDescription="@string/img_compass_background"
+        android:src="@drawable/compass_circle"
+        android:translationZ="6dp" />
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/compass_arrow"
+        android:layout_width="200sp"
+        android:layout_height="200sp"
+        android:layout_centerInParent="true"
+        android:layout_margin="12dp"
+        android:contentDescription="@string/img_compass_background"
+        android:src="@drawable/compass_arrow"
+        android:translationZ="20dp" />
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/compass_center"
+        android:layout_width="100sp"
+        android:layout_height="100sp"
+        android:layout_centerInParent="true"
+        android:layout_margin="12dp"
+        android:contentDescription="@string/img_compass_background"
+        android:src="@drawable/compass_center"
+        android:translationZ="16dp" />
+
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/compass_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="000º"
+        android:textSize="24sp"
+        android:textColor="@color/colorCompassText"
+        android:translationZ="17dp"/>
 
 </RelativeLayout>

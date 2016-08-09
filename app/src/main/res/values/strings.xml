@@ -25,4 +25,7 @@
     <string name="msg_terrain_map_mode">Terrain map mode</string>
     <string name="msg_map_not_ready">Maps is not ready</string>
 
+    <!-- Images description -->
+    <string name="img_compass_background">Compass background</string>
+
 </resources>

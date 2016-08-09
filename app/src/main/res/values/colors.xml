@@ -16,4 +16,9 @@
     <color name="colorFabLabelPressed">#99444444</color>
     <color name="colorFabLabelRipple">#99FFFFFF</color>
 
+    <!-- Compass colors -->
+    <color name="colorCompassBase">#BDBDBD</color>
+    <color name="colorCompassCenter">#FFFFFF</color>
+    <color name="colorCompassText">#424242</color>
+
 </resources>
