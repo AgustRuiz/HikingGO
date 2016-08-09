@@ -14,6 +14,10 @@
             android:id="@+id/nav_routes"
             android:icon="@drawable/ic_directions_24dp"
             android:title="@string/action_my_routes" />
+        <item
+            android:id="@+id/nav_compass"
+            android:icon="@drawable/ic_compass_24dp"
+            android:title="@string/action_compass" />
     </group>
     <group android:id="@+id/nav_group_2">
         <item

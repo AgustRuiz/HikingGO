@@ -4,6 +4,7 @@
     <string name="app_name">HikingGO</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="title_activity_maps">Map</string>
+    <string name="title_activity_compass">Compass</string>
 
     <!-- Navigation drawer -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -15,6 +16,7 @@
     <string name="action_home">Home</string>
     <string name="action_go_to_map">Go to map</string>
     <string name="action_my_routes">My routes</string>
+    <string name="action_compass">Compass</string>
 
     <!-- Messages -->
     <string name="msg_must_grant_location_permission">You must grant location permission!</string>

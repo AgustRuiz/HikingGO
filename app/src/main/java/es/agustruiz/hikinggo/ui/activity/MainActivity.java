@@ -128,6 +128,9 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.nav_map:
                         mPresenter.startMapActivity();
                         break;
+                    case R.id.nav_compass:
+                        mPresenter.startCompassActivity();
+                        break;
                     case R.id.nav_home:
                     case R.id.nav_routes:
                     case R.id.nav_settings:

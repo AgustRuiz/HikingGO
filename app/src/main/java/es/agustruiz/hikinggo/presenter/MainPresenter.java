@@ -3,6 +3,7 @@ package es.agustruiz.hikinggo.presenter;
 import android.content.Context;
 import android.content.Intent;
 
+import es.agustruiz.hikinggo.ui.activity.CompassActivity;
 import es.agustruiz.hikinggo.ui.activity.MainActivity;
 import es.agustruiz.hikinggo.ui.activity.MapsActivity;
 
@@ -24,6 +25,10 @@ public class MainPresenter implements IPresenter {
 
     public void startMapActivity() {
         mActivity.startActivity(new Intent(mContext, MapsActivity.class));
+    }
+
+    public void startCompassActivity() {
+        mActivity.startActivity(new Intent(mContext, CompassActivity.class));
     }
 
     //endregion
