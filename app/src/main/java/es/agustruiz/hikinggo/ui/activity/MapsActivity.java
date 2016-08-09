@@ -31,6 +31,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import es.agustruiz.hikinggo.R;
+import es.agustruiz.hikinggo.system.MapPreferences;
 import es.agustruiz.hikinggo.system.Permission;
 
 public class MapsActivity extends AppCompatActivity {
@@ -66,10 +67,7 @@ public class MapsActivity extends AppCompatActivity {
     protected Context mContext;
 
     protected GoogleMap mMap;
-    protected static final String CAMERA_POSITION_STATE = "mMap_cameraPosition_state";
-    protected CameraPosition mCameraPosition = null;
-    protected static final String MAP_TYPE = "mMap_mapType";
-    protected int mMapType = GoogleMap.MAP_TYPE_TERRAIN;
+
 
     //endregion
 
@@ -82,23 +80,10 @@ public class MapsActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         mContext = getApplicationContext();
 
-        if(savedInstanceState!=null){
-            mCameraPosition = savedInstanceState.getParcelable(CAMERA_POSITION_STATE);
-            mMapType = savedInstanceState.getInt(MAP_TYPE);
-        }
-
         initializeMap();
         initializeFabs();
 
     }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putParcelable(CAMERA_POSITION_STATE, mMap.getCameraPosition());
-        outState.putInt(MAP_TYPE, mMap.getMapType());
-    }
-
     @SuppressWarnings("MissingPermission")
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -121,6 +106,12 @@ public class MapsActivity extends AppCompatActivity {
         }else{
             super.onBackPressed();
         }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MapPreferences.saveMapState(mContext, mMap);
     }
 
     //endregion
@@ -172,12 +163,6 @@ public class MapsActivity extends AppCompatActivity {
 
                 // End testing...
 
-                if(mCameraPosition!=null){
-                    mMap.moveCamera(CameraUpdateFactory.newCameraPosition(mCameraPosition));
-                }else{
-                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(38.115129, -3.087572), 16));
-                }
-
             }
         });
     }
@@ -189,9 +174,9 @@ public class MapsActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     if(mMap!=null){
                         mMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
-                        showMessageView("Terrain map mode");
+                        showMessageView(getString(R.string.msg_terrain_map_mode));
                     }else{
-                        showMessageView("Maps is not ready");
+                        showMessageView(getString(R.string.msg_map_not_ready));
                     }
                     mFabMenu.close(true);
                 }
@@ -203,9 +188,9 @@ public class MapsActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     if(mMap!=null){
                         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-                        showMessageView("Normal map mode");
+                        showMessageView(getString(R.string.msg_normal_map_mode));
                     }else{
-                        showMessageView("Maps is not ready");
+                        showMessageView(getString(R.string.msg_map_not_ready));
                     }
                     mFabMenu.close(true);
                 }
@@ -217,9 +202,9 @@ public class MapsActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     if(mMap!=null){
                         mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
-                        showMessageView("Hybrid map mode");
+                        showMessageView(getString(R.string.msg_satellite_map_mode));
                     }else{
-                        showMessageView("Maps is not ready");
+                        showMessageView(getString(R.string.msg_map_not_ready));
                     }
                     mFabMenu.close(true);
                 }
@@ -227,18 +212,18 @@ public class MapsActivity extends AppCompatActivity {
         }
     }
 
-    protected void configureMap(GoogleMap map) {
-        map.setMapType(mMapType);
+    private void configureMap(GoogleMap map) {
+        MapPreferences.restoreMapState(mContext, map);
         if (Permission.checkLocationPermission(this)) {
             map.setMyLocationEnabled(true);
         }
     }
 
-    protected void showMessageView(String message) {
+    private void showMessageView(String message) {
         showMessageView(null, message);
     }
 
-    protected void showMessageView(View view, String message) {
+    private void showMessageView(View view, String message) {
         if (view == null)
             view = mFabMenu;
         Snackbar.make(view, message, Snackbar.LENGTH_LONG)

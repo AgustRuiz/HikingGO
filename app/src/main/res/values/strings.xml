@@ -18,5 +18,9 @@
 
     <!-- Messages -->
     <string name="msg_must_grant_location_permission">You must grant location permission!</string>
+    <string name="msg_satellite_map_mode">Satellite map mode</string>
+    <string name="msg_normal_map_mode">Normal map mode</string>
+    <string name="msg_terrain_map_mode">Terrain map mode</string>
+    <string name="msg_map_not_ready">Maps is not ready</string>
 
 </resources>
