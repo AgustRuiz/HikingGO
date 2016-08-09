@@ -1,6 +1,7 @@
 package es.agustruiz.hikinggo.ui.activity;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -19,6 +20,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.PolylineOptions;
@@ -61,9 +63,13 @@ public class MapsActivity extends AppCompatActivity {
     @BindView(R.id.nav_view)
     NavigationView mNavView;
 
-    Context mContext;
+    protected Context mContext;
 
     protected GoogleMap mMap;
+    protected static final String CAMERA_POSITION_STATE = "mMap_cameraPosition_state";
+    protected CameraPosition mCameraPosition = null;
+    protected static final String MAP_TYPE = "mMap_mapType";
+    protected int mMapType = GoogleMap.MAP_TYPE_TERRAIN;
 
     //endregion
 
@@ -75,12 +81,22 @@ public class MapsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_maps);
         ButterKnife.bind(this);
         mContext = getApplicationContext();
-        initializeMap();
-        initializeToolbar();
-        initializeFabs();
-        //initializeDrawer();
-        //initializeNavigationView();
 
+        if(savedInstanceState!=null){
+            mCameraPosition = savedInstanceState.getParcelable(CAMERA_POSITION_STATE);
+            mMapType = savedInstanceState.getInt(MAP_TYPE);
+        }
+
+        initializeMap();
+        initializeFabs();
+
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(CAMERA_POSITION_STATE, mMap.getCameraPosition());
+        outState.putInt(MAP_TYPE, mMap.getMapType());
     }
 
     @SuppressWarnings("MissingPermission")
@@ -151,16 +167,19 @@ public class MapsActivity extends AppCompatActivity {
                         .color(Color.argb(255, 255, 0, 0));
                 mMap.addPolyline(polyline);
 
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(38.115129, -3.087572), 16));
+
+
 
                 // End testing...
 
+                if(mCameraPosition!=null){
+                    mMap.moveCamera(CameraUpdateFactory.newCameraPosition(mCameraPosition));
+                }else{
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(38.115129, -3.087572), 16));
+                }
+
             }
         });
-    }
-
-    private void initializeToolbar() {
-        //setSupportActionBar(mToolbar);
     }
 
     private void initializeFabs(){
@@ -209,7 +228,7 @@ public class MapsActivity extends AppCompatActivity {
     }
 
     protected void configureMap(GoogleMap map) {
-        map.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+        map.setMapType(mMapType);
         if (Permission.checkLocationPermission(this)) {
             map.setMyLocationEnabled(true);
         }
