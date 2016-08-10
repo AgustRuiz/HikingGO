@@ -7,6 +7,9 @@
     <color name="colorAccent400">#66BA6A</color>
     <color name="colorNavigationBar">#F57C00</color>
 
+    <!-- Material design colors -->
+    <color name="grey300">#E0E0E0</color>
+
     <!-- FAB colors -->
     <color name="colorFabMenuBackground">#AAFFFFFF</color>
 

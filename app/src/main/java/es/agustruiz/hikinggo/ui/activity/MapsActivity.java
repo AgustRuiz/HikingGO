@@ -12,6 +12,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -38,6 +39,7 @@ import butterknife.ButterKnife;
 import es.agustruiz.hikinggo.R;
 import es.agustruiz.hikinggo.system.MapPreferences;
 import es.agustruiz.hikinggo.system.Permission;
+import es.agustruiz.hikinggo.ui.dialog.MapTypeDialogFragment;
 import es.agustruiz.hikinggo.ui.tools.MapTools;
 
 public class MapsActivity extends AppCompatActivity {
@@ -106,7 +108,7 @@ public class MapsActivity extends AppCompatActivity {
                 showMessageView("Show settings here...");
                 return true;
             case R.id.action_map_type:
-                showMessageView("Map type");
+                showMapTypeDialog();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -234,6 +236,33 @@ public class MapsActivity extends AppCompatActivity {
             view = mFabMenu;
         Snackbar.make(view, message, Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show();
+    }
+
+    private void showMapTypeDialog() {
+        MapTypeDialogFragment dialog = new MapTypeDialogFragment(mMap.getMapType(),
+                new MapTypeDialogFragment.OnMapTypeChangedListener() {
+                    @Override
+                    public void onMapTypeChanged(int mapType) {
+
+                        if (mMap != null) {
+                            mMap.setMapType(mapType);
+                            switch (mapType) {
+                                case GoogleMap.MAP_TYPE_HYBRID:
+                                    showMessageView(getString(R.string.msg_satellite_map_mode));
+                                    break;
+                                case GoogleMap.MAP_TYPE_TERRAIN:
+                                    showMessageView(getString(R.string.msg_terrain_map_mode));
+                                    break;
+                                case GoogleMap.MAP_TYPE_NORMAL:
+                                    showMessageView(getString(R.string.msg_normal_map_mode));
+                                    break;
+                            }
+                        } else {
+                            showMessageView(getString(R.string.msg_map_not_ready));
+                        }
+                    }
+                });
+        dialog.show(getSupportFragmentManager(), MapTypeDialogFragment.TAG);
     }
 
     //endregion
