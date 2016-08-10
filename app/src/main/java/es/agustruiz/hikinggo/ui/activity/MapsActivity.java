@@ -1,9 +1,12 @@
 package es.agustruiz.hikinggo.ui.activity;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -16,13 +19,13 @@ import android.view.View;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.CameraPosition;
-import com.google.android.gms.maps.model.CircleOptions;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.util.ArrayList;
@@ -84,6 +87,7 @@ public class MapsActivity extends AppCompatActivity {
         initializeFabs();
 
     }
+
     @SuppressWarnings("MissingPermission")
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -101,9 +105,9 @@ public class MapsActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if(mFabMenu.isOpened()){
+        if (mFabMenu.isOpened()) {
             mFabMenu.close(true);
-        }else{
+        } else {
             super.onBackPressed();
         }
     }
@@ -140,26 +144,18 @@ public class MapsActivity extends AppCompatActivity {
                 pointsList.add(new LatLng(38.113961, -3.091196));
                 pointsList.add(new LatLng(38.113412, -3.090090));
 
-                PolylineOptions polyline = new PolylineOptions();
-                for(LatLng point: pointsList){
-                    polyline.add(point);
-                    mMap.addCircle(new CircleOptions()
-                            .clickable(true)
-                            .zIndex(200)
-                            .center(point)
-                            .radius(5)
-                            .fillColor(Color.argb(255, 0, 0, 255))
-                            .strokeWidth(0));
-                }
-                polyline
+                PolylineOptions polyline = new PolylineOptions()
                         .clickable(true)
                         .zIndex(100)
-                        .width(5)
-                        .color(Color.argb(255, 255, 0, 0));
+                        .width(10)
+                        .color(Color.argb(210, 33, 150, 243));
+                for (LatLng point : pointsList) {
+                    polyline.add(point);
+                }
                 mMap.addPolyline(polyline);
 
-
-
+                putMarker(mMap, R.drawable.marker_start, pointsList.get(0));
+                putMarker(mMap, R.drawable.marker_stop, pointsList.get(pointsList.size() - 1));
 
                 // End testing...
 
@@ -167,43 +163,63 @@ public class MapsActivity extends AppCompatActivity {
         });
     }
 
-    private void initializeFabs(){
-        if(mFabTerrain!=null){
+    private void putMarker(GoogleMap map, int drawable, LatLng latLng) {
+        Drawable d;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            d = mContext.getDrawable(drawable);
+        } else {
+            d = mContext.getResources().getDrawable(drawable);
+        }
+        Canvas canvas = new Canvas();
+        Bitmap bitmap = Bitmap.createBitmap(d.getIntrinsicWidth(), d.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        canvas.setBitmap(bitmap);
+        d.setBounds(0, 0, d.getIntrinsicWidth(), d.getIntrinsicHeight());
+        d.draw(canvas);
+        BitmapDescriptor bd = BitmapDescriptorFactory.fromBitmap(bitmap);
+        MarkerOptions markerOptions = new MarkerOptions().position(latLng)
+                .title("Current Location")
+                .snippet("Thinking of finding some thing...")
+                .icon(bd);
+        map.addMarker(markerOptions);
+    }
+
+    private void initializeFabs() {
+        if (mFabTerrain != null) {
             mFabTerrain.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(mMap!=null){
+                    if (mMap != null) {
                         mMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
                         showMessageView(getString(R.string.msg_terrain_map_mode));
-                    }else{
+                    } else {
                         showMessageView(getString(R.string.msg_map_not_ready));
                     }
                     mFabMenu.close(true);
                 }
             });
         }
-        if(mFabNormal !=null){
+        if (mFabNormal != null) {
             mFabNormal.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(mMap!=null){
+                    if (mMap != null) {
                         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
                         showMessageView(getString(R.string.msg_normal_map_mode));
-                    }else{
+                    } else {
                         showMessageView(getString(R.string.msg_map_not_ready));
                     }
                     mFabMenu.close(true);
                 }
             });
         }
-        if(mFabSatellite !=null){
+        if (mFabSatellite != null) {
             mFabSatellite.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(mMap!=null){
+                    if (mMap != null) {
                         mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
                         showMessageView(getString(R.string.msg_satellite_map_mode));
-                    }else{
+                    } else {
                         showMessageView(getString(R.string.msg_map_not_ready));
                     }
                     mFabMenu.close(true);
