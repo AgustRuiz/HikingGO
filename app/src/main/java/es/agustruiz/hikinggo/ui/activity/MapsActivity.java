@@ -15,6 +15,8 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.github.clans.fab.FloatingActionButton;
@@ -86,6 +88,29 @@ public class MapsActivity extends AppCompatActivity {
         initializeMap();
         initializeFabs();
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_map, menu);
+        return true;
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.action_settings:
+                //TODO Show settings here...
+                showMessageView("Show settings here...");
+                return true;
+            case R.id.action_map_type:
+                showMessageView("Map type");
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @SuppressWarnings("MissingPermission")

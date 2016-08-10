@@ -120,9 +120,6 @@ public class MainActivity extends AppCompatActivity {
         mNavView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem item) {
-                Log.d(LOG_TAG, "Here I am");
-
-
                 int id = item.getItemId();
                 switch (id) {
                     case R.id.nav_map:

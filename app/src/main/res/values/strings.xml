@@ -17,6 +17,7 @@
     <string name="action_go_to_map">Go to map</string>
     <string name="action_my_routes">My routes</string>
     <string name="action_compass">Compass</string>
+    <string name="action_map_type">Map type</string>
 
     <!-- Messages -->
     <string name="msg_must_grant_location_permission">You must grant location permission!</string>
