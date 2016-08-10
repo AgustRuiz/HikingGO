@@ -38,6 +38,7 @@ import butterknife.ButterKnife;
 import es.agustruiz.hikinggo.R;
 import es.agustruiz.hikinggo.system.MapPreferences;
 import es.agustruiz.hikinggo.system.Permission;
+import es.agustruiz.hikinggo.ui.tools.MapTools;
 
 public class MapsActivity extends AppCompatActivity {
 
@@ -95,7 +96,6 @@ public class MapsActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu_map, menu);
         return true;
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -157,8 +157,6 @@ public class MapsActivity extends AppCompatActivity {
                 configureMap(mMap);
 
                 //TODO: This is only for testing
-
-                // Points list
                 List<LatLng> pointsList = new ArrayList<>();
                 pointsList.add(new LatLng(38.113281, -3.093529));
                 pointsList.add(new LatLng(38.113326, -3.093385));
@@ -168,44 +166,11 @@ public class MapsActivity extends AppCompatActivity {
                 pointsList.add(new LatLng(38.113944, -3.091978));
                 pointsList.add(new LatLng(38.113961, -3.091196));
                 pointsList.add(new LatLng(38.113412, -3.090090));
-
-                PolylineOptions polyline = new PolylineOptions()
-                        .clickable(true)
-                        .zIndex(100)
-                        .width(10)
-                        .color(Color.argb(210, 33, 150, 243));
-                for (LatLng point : pointsList) {
-                    polyline.add(point);
-                }
-                mMap.addPolyline(polyline);
-
-                putMarker(mMap, R.drawable.marker_start, pointsList.get(0));
-                putMarker(mMap, R.drawable.marker_stop, pointsList.get(pointsList.size() - 1));
-
+                MapTools.drawPath(mContext, mMap, pointsList);
                 // End testing...
 
             }
         });
-    }
-
-    private void putMarker(GoogleMap map, int drawable, LatLng latLng) {
-        Drawable d;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            d = mContext.getDrawable(drawable);
-        } else {
-            d = mContext.getResources().getDrawable(drawable);
-        }
-        Canvas canvas = new Canvas();
-        Bitmap bitmap = Bitmap.createBitmap(d.getIntrinsicWidth(), d.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
-        canvas.setBitmap(bitmap);
-        d.setBounds(0, 0, d.getIntrinsicWidth(), d.getIntrinsicHeight());
-        d.draw(canvas);
-        BitmapDescriptor bd = BitmapDescriptorFactory.fromBitmap(bitmap);
-        MarkerOptions markerOptions = new MarkerOptions().position(latLng)
-                .title("Current Location")
-                .snippet("Thinking of finding some thing...")
-                .icon(bd);
-        map.addMarker(markerOptions);
     }
 
     private void initializeFabs() {
